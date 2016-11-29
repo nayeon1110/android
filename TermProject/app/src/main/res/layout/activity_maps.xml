@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_maps"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+
+    <TabHost
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/tab_host">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white" />
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="visible"
+                    android:weightSum="1"
+                    android:background="@android:color/holo_orange_light">
+
+                    <TextView
+                        android:text="Task  List"
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView"
+                        android:layout_marginLeft="125dp"
+                        android:layout_marginTop="40dp"
+                        android:textSize="26sp" />
+
+                    <Button
+                        android:text="edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="39dp"
+                        android:id="@+id/button18"
+                        android:layout_marginLeft="250dp"
+                        android:layout_marginTop="-35dp"
+                        android:drawableLeft="@android:drawable/ic_menu_edit" />
+
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:layout_height="94dp"
+                        android:layout_weight="0.72"
+                        android:id="@+id/text_list_view"
+                        android:background="@android:color/holo_red_light" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/Map"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="1"
+                    android:background="@color/wallet_highlighted_text_holo_light"
+                    android:baselineAligned="false">
+
+                    <fragment
+                        android:id="@+id/map"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        tools:context="com.example.termproject.MapsActivity"
+                        android:layout_height="350dp"/>
+
+                    <Button
+                        android:text="refresh"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/button16"
+                        android:background="@android:color/holo_orange_light"
+                        android:drawableLeft="@android:drawable/ic_menu_revert"
+                        android:layout_weight="0.46"
+                        android:textSize="17sp" />
+
+                    <Button
+                        android:text="statistics"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/button17"
+                        android:layout_weight="0.23"
+                        android:background="?android:attr/colorControlActivated"
+                        android:drawableLeft="@android:drawable/ic_menu_view"
+                        android:textSize="17sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/Walk"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="visible"
+                    android:background="@android:color/holo_orange_light"
+                    android:weightSum="1"
+                    android:baselineAligned="false">
+
+                    <TextView
+                        android:text="You Walked   000 steps!!!"
+                        android:layout_width="277dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView2"
+                        android:layout_marginLeft="70dp"
+                        android:layout_marginTop="50dp"
+                        android:textSize="45sp" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@android:drawable/ic_menu_myplaces"
+                        android:id="@+id/imageView"
+                        android:layout_weight="1.01" />
+
+                    <Button
+                        android:text="Start"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/button19"
+                        android:background="@color/colorAccent" />
+
+                    <Button
+                        android:text="end"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/button20"
+                        android:background="@color/wallet_highlighted_text_holo_dark" />
+
+                    <Button
+                        android:text="refresh"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/button21"
+                        android:background="@color/cast_intro_overlay_button_background_color" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/Memo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:id="@+id/check"
+                    android:visibility="visible">
+
+                </LinearLayout>
+
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+</LinearLayout>
+
+
+
+
+
+
+
