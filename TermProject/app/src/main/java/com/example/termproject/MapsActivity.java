@@ -1,11 +1,13 @@
 package com.example.termproject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -52,19 +54,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         spec3.setContent(R.id.Walk);
         spec3.setIndicator("Walk");
 
-        TabHost.TabSpec spec4 = tabHost.newTabSpec("Tab 4");
-        spec4.setContent(R.id.Memo);
-        spec4.setIndicator("Memo");
 
-        TabHost.TabSpec spec5 = tabHost.newTabSpec("Tab 5");
-        spec5.setContent(R.id.check);
-        spec5.setIndicator("Check");
+        TabHost.TabSpec spec4 = tabHost.newTabSpec("Tab 4");
+        spec4.setContent(R.id.check);
+        spec4.setIndicator("Check");
 
         tabHost.addTab(spec1);
         tabHost.addTab(spec2);
         tabHost.addTab(spec3);
         tabHost.addTab(spec4);
-        tabHost.addTab(spec5);
 
         final TextView task_list = (TextView)findViewById(R.id.textView);
         final TextView walk = (TextView)findViewById(R.id.textView2);
@@ -75,6 +73,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Button w_end = (Button) findViewById(R.id.button20);
         Button w_refresh = (Button) findViewById(R.id.button21);
         ImageView walking = (ImageView) findViewById(R.id.imageView);
+        walking.setImageResource(R.drawable.icon);
+
 
         ListView listView;
         ListViewAdapter adapter;
@@ -82,6 +82,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         listView = (ListView) findViewById(R.id.text_list_view);
         listView.setAdapter(adapter);
+        adapter.addItem("커피 마심");
+
+        l_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MapsActivity.this, EditActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+
+
+
 
 
 
@@ -161,7 +175,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng curPoint = new LatLng(latitude, longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(curPoint));
 
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
 
         MarkerOptions optFirst = new MarkerOptions();
         optFirst.position(curPoint);// 위도 • 경도

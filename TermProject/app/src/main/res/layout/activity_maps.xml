@@ -36,7 +36,7 @@
                     android:orientation="vertical"
                     android:visibility="visible"
                     android:weightSum="1"
-                    android:background="@android:color/holo_orange_light">
+                    android:background="@android:color/background_light">
 
                     <TextView
                         android:text="Task  List"
@@ -61,45 +61,7 @@
                         android:layout_height="94dp"
                         android:layout_weight="0.72"
                         android:id="@+id/text_list_view"
-                        android:background="@android:color/holo_red_light" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/Map"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:weightSum="1"
-                    android:background="@color/wallet_highlighted_text_holo_light"
-                    android:baselineAligned="false">
-
-                    <fragment
-                        android:id="@+id/map"
-                        android:name="com.google.android.gms.maps.SupportMapFragment"
-                        android:layout_width="match_parent"
-                        tools:context="com.example.termproject.MapsActivity"
-                        android:layout_height="350dp"/>
-
-                    <Button
-                        android:text="refresh"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/button16"
-                        android:background="@android:color/holo_orange_light"
-                        android:drawableLeft="@android:drawable/ic_menu_revert"
-                        android:layout_weight="0.46"
-                        android:textSize="17sp" />
-
-                    <Button
-                        android:text="statistics"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/button17"
-                        android:layout_weight="0.23"
-                        android:background="?android:attr/colorControlActivated"
-                        android:drawableLeft="@android:drawable/ic_menu_view"
-                        android:textSize="17sp" />
-
+                        android:background="?android:attr/colorBackground" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -108,7 +70,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:visibility="visible"
-                    android:background="@android:color/holo_orange_light"
+                    android:background="@android:color/background_light"
                     android:weightSum="1"
                     android:baselineAligned="false">
 
@@ -118,15 +80,15 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/textView2"
                         android:layout_marginLeft="70dp"
-                        android:layout_marginTop="50dp"
+                        android:layout_marginTop="47dp"
                         android:textSize="45sp" />
 
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@android:drawable/ic_menu_myplaces"
                         android:id="@+id/imageView"
-                        android:layout_weight="1.01" />
+                        android:layout_weight="1.01"
+                        android:src="@drawable/icon" />
 
                     <Button
                         android:text="Start"
@@ -140,7 +102,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/button20"
-                        android:background="@color/wallet_highlighted_text_holo_dark" />
+                        android:background="?android:attr/colorPressedHighlight" />
 
                     <Button
                         android:text="refresh"
@@ -151,11 +113,40 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/Memo"
+                    android:id="@+id/Map"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:visibility="visible">
+                    android:weightSum="1"
+                    android:background="@android:color/background_light"
+                    android:baselineAligned="false">
+
+                    <fragment
+                        android:id="@+id/map"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        tools:context="com.example.termproject.MapsActivity"
+                        android:layout_height="410dp"/>
+
+                    <Button
+                        android:text="refresh"
+                        android:layout_width="195dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/button16"
+                        android:background="@android:color/holo_orange_light"
+                        android:drawableLeft="@android:drawable/ic_menu_revert"
+                        android:textSize="17sp" />
+
+                    <Button
+                        android:text="statistics"
+                        android:layout_width="190dp"
+                        android:layout_height="46dp"
+                        android:id="@+id/button17"
+                        android:layout_marginLeft="193dp"
+                        android:layout_marginTop="-46dp"
+                        android:background="?android:attr/colorControlActivated"
+                        android:drawableLeft="@android:drawable/ic_menu_view"
+                        android:textSize="17sp" />
 
                 </LinearLayout>
 

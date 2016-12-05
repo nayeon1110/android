@@ -1,14 +1,14 @@
 package com.example.termproject;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -19,6 +19,7 @@ import java.util.ArrayList;
  */
 
 public class ListViewAdapter extends BaseAdapter {
+    long timeWhenstopped=0;
 
     private ArrayList<ListViewItem> listViewItems  = new ArrayList<ListViewItem>();
     //Adapter에 추가된 데이터를 저장하기 위한 Arraylist
@@ -56,7 +57,8 @@ public class ListViewAdapter extends BaseAdapter {
         }
 
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
-        ImageView iconImageView = (ImageView) convertView.findViewById(R.id.imageView2) ;
+        //ImageView iconImageView = (ImageView) convertView.findViewById(R.id.imageView2) ;
+        Button save = (Button) convertView.findViewById(R.id.save);
         TextView titleTextView = (TextView) convertView.findViewById(R.id.textView4) ;
         Switch switchview = (Switch) convertView.findViewById(R.id.switch1);
         final Chronometer chs = (Chronometer)convertView.findViewById(R.id.chronometer2);
@@ -67,16 +69,26 @@ public class ListViewAdapter extends BaseAdapter {
         ListViewItem listViewItem = listViewItems.get(position);//생성한 클래스
 
         // 아이템 내 각 위젯에 데이터 반영
-        iconImageView.setImageDrawable(listViewItem.getIcon());
+        //iconImageView.setImageDrawable(listViewItem.getIcon());
         titleTextView.setText(listViewItem.getTitle());
         switchview.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b)
+                if(b) {
+                    chs.setBase(SystemClock.elapsedRealtime()+timeWhenstopped);
                     chs.start();
-                else
+                }
+                else {
+                    timeWhenstopped = chs.getBase() - SystemClock.elapsedRealtime();
                     chs.stop();
-
+                }
+            }
+        });
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                chs.setBase(SystemClock.elapsedRealtime());
+                timeWhenstopped = 0;
             }
         });
 
@@ -84,14 +96,12 @@ public class ListViewAdapter extends BaseAdapter {
 
     }
 
-    public void addItem(Drawable icon, String str, Switch swc, Chronometer ch)//아이템 데이터 추가를 위한 함수
+    public void addItem(String str)//아이템 데이터 추가를 위한 함수
     {
         ListViewItem item = new ListViewItem();
 
-        item.setIcon(icon);
+       // item.setIcon(icon);
         item.setTitle(str);
-        item.setSwitch(swc);
-        item.setTimer(ch);
 
         listViewItems.add(item);
     }
