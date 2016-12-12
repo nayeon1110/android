@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     TextView tv2;
     ToggleButton tb;
 
+    //final test coding
 
     static String p1[] = new String[144];
     static String p2[] = new String[144];
