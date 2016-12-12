@@ -30,6 +30,42 @@
                 android:layout_height="match_parent">
 
                 <LinearLayout
+                    android:id="@+id/Map"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="1"
+                    android:background="@android:color/background_light"
+                    android:baselineAligned="false">
+
+                    <fragment
+                        android:id="@+id/map"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        tools:context="com.example.termproject.MapsActivity"
+                        android:layout_height="360dp" />
+
+                    <Button
+                        android:text="refresh"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/button16"
+                        android:background="@android:color/holo_orange_light"
+                        android:drawableLeft="@android:drawable/ic_menu_revert"
+                        android:textSize="17sp" />
+
+                    <Button
+                        android:text="statistics"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/button17"
+                        android:background="?android:attr/colorControlActivated"
+                        android:drawableLeft="@android:drawable/ic_menu_view"
+                        android:textSize="17sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/list"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -48,13 +84,12 @@
                         android:textSize="26sp" />
 
                     <Button
-                        android:text="edit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="39dp"
-                        android:id="@+id/button18"
-                        android:layout_marginLeft="250dp"
-                        android:layout_marginTop="-35dp"
-                        android:drawableLeft="@android:drawable/ic_menu_edit" />
+                        android:text="list"
+                        android:layout_width="80dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="225dp"
+                        android:layout_marginTop="20dp"
+                        android:id="@+id/button10" />
 
                     <ListView
                         android:layout_width="match_parent"
@@ -113,50 +148,24 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/Map"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:weightSum="1"
-                    android:background="@android:color/background_light"
-                    android:baselineAligned="false">
-
-                    <fragment
-                        android:id="@+id/map"
-                        android:name="com.google.android.gms.maps.SupportMapFragment"
-                        android:layout_width="match_parent"
-                        tools:context="com.example.termproject.MapsActivity"
-                        android:layout_height="410dp"/>
-
-                    <Button
-                        android:text="refresh"
-                        android:layout_width="195dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/button16"
-                        android:background="@android:color/holo_orange_light"
-                        android:drawableLeft="@android:drawable/ic_menu_revert"
-                        android:textSize="17sp" />
-
-                    <Button
-                        android:text="statistics"
-                        android:layout_width="190dp"
-                        android:layout_height="46dp"
-                        android:id="@+id/button17"
-                        android:layout_marginLeft="193dp"
-                        android:layout_marginTop="-46dp"
-                        android:background="?android:attr/colorControlActivated"
-                        android:drawableLeft="@android:drawable/ic_menu_view"
-                        android:textSize="17sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:id="@+id/check"
                     android:visibility="visible">
 
+                    <Button
+                        android:text="Reset"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="200dp"
+                        android:id="@+id/button12" />
+
+                    <TextView
+                        android:text="TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView14" />
                 </LinearLayout>
 
             </FrameLayout>

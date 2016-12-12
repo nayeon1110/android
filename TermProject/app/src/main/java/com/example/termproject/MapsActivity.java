@@ -1,13 +1,18 @@
 package com.example.termproject;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -26,12 +31,23 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    boolean Isintent = false;
+    String msg;
+    ListView listView;
+    ListViewAdapter adapter;
+    Double lat_,lon_;
     private GoogleMap mMap;
+    TextView statistics;
+    String result;
+    Button reset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        final DBHelper dbHelp2 = new DBHelper(getApplicationContext(), "LOGGER.db" , null ,1);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -66,30 +82,82 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         final TextView task_list = (TextView)findViewById(R.id.textView);
         final TextView walk = (TextView)findViewById(R.id.textView2);
-        Button l_edit = (Button) findViewById(R.id.button18);
         Button m_refresh = (Button) findViewById(R.id.button16);
         Button m_statistics = (Button) findViewById(R.id.button17);
         Button w_start = (Button) findViewById(R.id.button19);
         Button w_end = (Button) findViewById(R.id.button20);
         Button w_refresh = (Button) findViewById(R.id.button21);
+        Button list_w = (Button) findViewById(R.id.button10); //list 버튼
+        reset = (Button) findViewById(R.id.button12);
         ImageView walking = (ImageView) findViewById(R.id.imageView);
         walking.setImageResource(R.drawable.icon);
+        statistics = (TextView) findViewById(R.id.textView14);
+
+        result = dbHelp2.getResult();
+        statistics.setText(result);
+
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                result = dbHelp2.getResult();
+                statistics.setText(result);
+            }
+        });
 
 
-        ListView listView;
-        ListViewAdapter adapter;
+        list_w.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent3 = new Intent(MapsActivity.this,Timeractivity.class);
+                intent3.putExtra("lat",lat_);
+                intent3.putExtra("lon",lon_);
+                startActivity(intent3);
+
+
+
+            }
+        });
+
+
+        SQLiteDatabase db = dbHelp2.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM LOGGER",null);
+
+
+
+
+
         adapter = new ListViewAdapter();
 
         listView = (ListView) findViewById(R.id.text_list_view);
         listView.setAdapter(adapter);
-        adapter.addItem("커피 마심");
 
-        l_edit.setOnClickListener(new View.OnClickListener() {
+
+        while(cursor.moveToNext())
+        {
+            msg = cursor.getString(1);
+            adapter.addItem(msg);
+
+        }
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {//길게 클릭했을 때
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MapsActivity.this, EditActivity.class);
-                startActivity(intent);
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long id) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
+                alert.setTitle("삭제");
+                alert.setMessage("이 리스트를 삭제하시겠습니까?");
+                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        dialog.dismiss();
+                        dbHelp2.delete(position);
+                        adapter.deleteItem(position);
+                        adapter.notifyDataSetChanged();
 
+                        //DB delete하는 명령, 리스트뷰 갱신
+                    }
+                });
+                alert.show();
+                return false;
             }
         });
 
@@ -100,8 +168,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
+
+
+
+
+
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();//리스트뷰 갱신
+   }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.notifyDataSetChanged();
+    }
 
     /**
      * Manipulates the map once available.
@@ -145,6 +229,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             latitude = location.getLatitude();
             longitude = location.getLongitude();
 
+            getLat(latitude);
+            getLongi(longitude);
+
+
+
             showCurrentLocation(latitude,longitude);
 
 
@@ -161,6 +250,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
+
+        public void getLat(double lat)
+        {
+            lat_ = lat;
+
+        }
+        public void getLongi(double lon)
+        {
+            lon_ = lon;
+        }
+
+
 
 
     }
@@ -187,6 +288,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                Intent intent = new Intent(getApplicationContext(), EditActivity.class);
+                intent.putExtra("lat",latitude);
+                intent.putExtra("lon",longitude);
+
+                startActivity(intent);
+
                 return false;
             }
         });

@@ -104,7 +104,15 @@ public class ListViewAdapter extends BaseAdapter {
         item.setTitle(str);
 
         listViewItems.add(item);
+
+
+
     }
+    public void deleteItem(int position)
+    {
+        listViewItems.remove(position);
+    }
+
 
 
 
