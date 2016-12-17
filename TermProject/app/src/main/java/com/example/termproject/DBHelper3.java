@@ -1,4 +1,4 @@
-package com.example.termproject;
+﻿package com.example.termproject;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -58,9 +58,9 @@ public class DBHelper3 extends SQLiteOpenHelper{
             {
                 if(cursor.getInt(2) == months)
                 {
-                    if(cursor.getInt(3) >= dates)
+                    if(cursor.getInt(3) >= dates-7)
                     {
-                        if(cursor.getInt(3) <= dates+7)
+                        if(cursor.getInt(3) <= dates)
                         {
                             result += cursor.getInt(1) + "년 " + cursor.getInt(2) +"월 " + cursor.getInt(3) +"일  걸음수 : "
                                     + cursor.getInt(4) +"\n";

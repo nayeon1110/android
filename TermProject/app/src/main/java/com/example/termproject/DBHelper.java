@@ -1,4 +1,4 @@
-package com.example.termproject;
+﻿package com.example.termproject;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -181,10 +181,10 @@ public class DBHelper extends SQLiteOpenHelper {
             {
                 if(cursor.getInt(10) == month)
                 {
-                    if(cursor.getInt(11) >= date)
+                    if(cursor.getInt(11) >= date-7)
                     {
 
-                        if(cursor.getInt(11) <= date+7)
+                        if(cursor.getInt(11) <= date)
                         {
 
                             if(cursor.getString(14).equals("학교"))
@@ -257,9 +257,9 @@ public class DBHelper extends SQLiteOpenHelper {
             {
                 if(cursor.getInt(10) == month)
                 {
-                    if(cursor.getInt(11) >= date)
+                    if(cursor.getInt(11) >= date-7)
                     {
-                        if(cursor.getInt(11) <= date+7)
+                        if(cursor.getInt(11) <= date)
                         {
                             result += " 시작: " + cursor.getInt(4) +"년 " + cursor.getInt(5)
                                     + "월 " +cursor.getInt(6) +"일 "+  cursor.getInt(7) + "시 " + cursor.getInt(8) +
