@@ -3,16 +3,25 @@ package com.example.termproject;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.icu.util.Calendar;
 import android.icu.util.GregorianCalendar;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
+import java.io.ByteArrayOutputStream;
 
 public class EditActivity extends AppCompatActivity {
 
@@ -27,7 +36,32 @@ public class EditActivity extends AppCompatActivity {
     Double lati, longi;
     String db_event;
     int s_year,s_month,s_day,s_hour,s_minute,e_year,e_month,e_day,e_hour,e_minute;
+    ImageView cam;
+    Bitmap bitmap;
+    Spinner option2;
+    String location;
 
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        bitmap = (Bitmap)  data.getExtras().get("data");
+        cam.setImageURI(data.getData());
+        byte[] resl = bitmaptobyte(bitmap);
+        DBHelper2 dbHelper2 = new DBHelper2(getApplicationContext(), "LOGGER2.db", null,1);
+        dbHelper2.insertimage(resl);
+
+
+    }
+
+    public byte[] bitmaptobyte(Bitmap bmap)
+    {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
+        byte[] bytearr = stream.toByteArray();
+        return bytearr;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +98,7 @@ public class EditActivity extends AppCompatActivity {
         day= calendar.get(Calendar.DAY_OF_MONTH);
         hour = calendar.get(Calendar.HOUR_OF_DAY);
         minute = calendar.get(Calendar.MINUTE);
+        cam = (ImageView) findViewById(R.id.imageView2);
 
 
         lat.setText("위도 : " + lati);
@@ -71,11 +106,35 @@ public class EditActivity extends AppCompatActivity {
 
 
 
+        String[] str2 = getResources().getStringArray(R.array.spinnerArray2);
+        ArrayAdapter<String> adapter22 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,str2);
+        option2 = (Spinner) findViewById(R.id.spinner2);
+        option2.setAdapter(adapter22);
+
+        option2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                location = (String)option2.getSelectedItem();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+
+
+
+
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 db_event = write.getText().toString();
-                dbHelp.insert(db_event,lati,longi,s_year,s_month,s_day,s_hour,s_minute,e_year,e_month,e_day,e_hour,e_minute);
+                dbHelp.insert(db_event,lati,longi,s_year,s_month,s_day,s_hour,s_minute,e_year,e_month,e_day,e_hour,e_minute,location);
+                Toast.makeText(getApplicationContext(),"저장되었습니다",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -149,6 +208,21 @@ public class EditActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+        Camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent in = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(in,1);
+
+            }
+        });
+
+
+
+
+
 
 
 

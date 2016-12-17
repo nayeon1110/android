@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinnerArray2">
+        <item>학교</item>
+        <item>여가생활</item>
+        <item>여행</item>
+        <item>기타</item>
+    </string-array>
+</resources>

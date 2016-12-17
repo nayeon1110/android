@@ -66,7 +66,7 @@ public class ListViewAdapter extends BaseAdapter {
 
 
         // Data Set(listViewItems)에서 position에 위치한 데이터 참조 획득
-        ListViewItem listViewItem = listViewItems.get(position);//생성한 클래스
+        final ListViewItem listViewItem = listViewItems.get(position);//생성한 클래스
 
         // 아이템 내 각 위젯에 데이터 반영
         //iconImageView.setImageDrawable(listViewItem.getIcon());
@@ -75,10 +75,12 @@ public class ListViewAdapter extends BaseAdapter {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b) {
+
                     chs.setBase(SystemClock.elapsedRealtime()+timeWhenstopped);
                     chs.start();
                 }
                 else {
+
                     timeWhenstopped = chs.getBase() - SystemClock.elapsedRealtime();
                     chs.stop();
                 }
@@ -87,8 +89,12 @@ public class ListViewAdapter extends BaseAdapter {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //listViewItem.getTimer().setBase(SystemClock.elapsedRealtime());
                 chs.setBase(SystemClock.elapsedRealtime());
                 timeWhenstopped = 0;
+
+
+
             }
         });
 

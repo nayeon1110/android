@@ -43,16 +43,7 @@
                         android:name="com.google.android.gms.maps.SupportMapFragment"
                         android:layout_width="match_parent"
                         tools:context="com.example.termproject.MapsActivity"
-                        android:layout_height="360dp" />
-
-                    <Button
-                        android:text="refresh"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/button16"
-                        android:background="@android:color/holo_orange_light"
-                        android:drawableLeft="@android:drawable/ic_menu_revert"
-                        android:textSize="17sp" />
+                        android:layout_height="410dp" />
 
                     <Button
                         android:text="statistics"
@@ -63,40 +54,6 @@
                         android:drawableLeft="@android:drawable/ic_menu_view"
                         android:textSize="17sp" />
 
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:visibility="visible"
-                    android:weightSum="1"
-                    android:background="@android:color/background_light">
-
-                    <TextView
-                        android:text="Task  List"
-                        android:layout_width="130dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/textView"
-                        android:layout_marginLeft="125dp"
-                        android:layout_marginTop="40dp"
-                        android:textSize="26sp" />
-
-                    <Button
-                        android:text="list"
-                        android:layout_width="80dp"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="225dp"
-                        android:layout_marginTop="20dp"
-                        android:id="@+id/button10" />
-
-                    <ListView
-                        android:layout_width="match_parent"
-                        android:layout_height="94dp"
-                        android:layout_weight="0.72"
-                        android:id="@+id/text_list_view"
-                        android:background="?android:attr/colorBackground" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -126,13 +83,6 @@
                         android:src="@drawable/icon" />
 
                     <Button
-                        android:text="Start"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/button19"
-                        android:background="@color/colorAccent" />
-
-                    <Button
                         android:text="end"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -154,21 +104,65 @@
                     android:id="@+id/check"
                     android:visibility="visible">
 
+                    <Spinner
+                        android:layout_width="170dp"
+                        android:layout_height="40dp"
+                        android:id="@+id/spinner" />
+
+                    <Spinner
+                        android:layout_width="170dp"
+                        android:layout_marginTop="-40dp"
+                        android:layout_marginLeft="200dp"
+                        android:layout_height="40dp"
+                        android:id="@+id/spinner3" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="380dp">
+
+                        <TextView
+                            android:text="STATISTICS"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/textView14" />
+                    </FrameLayout>
+
                     <Button
-                        android:text="Reset"
+                        android:text="REFRESH"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="200dp"
-                        android:id="@+id/button12" />
+                        android:id="@+id/button10" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="visible"
+                    android:weightSum="1"
+                    android:background="@android:color/background_light">
 
                     <TextView
-                        android:text="TextView"
-                        android:layout_width="match_parent"
+                        android:text="Task  List"
+                        android:layout_width="130dp"
                         android:layout_height="wrap_content"
-                        android:id="@+id/textView14" />
+                        android:id="@+id/textView"
+                        android:layout_marginLeft="125dp"
+                        android:layout_marginTop="40dp"
+                        android:textSize="26sp" />
+
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:layout_height="94dp"
+                        android:layout_weight="0.72"
+                        android:id="@+id/text_list_view"
+                        android:background="?android:attr/colorBackground" />
                 </LinearLayout>
 
             </FrameLayout>
+
         </LinearLayout>
     </TabHost>
 </LinearLayout>

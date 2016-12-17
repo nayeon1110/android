@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinnerArray3">
+        <item>하루통계</item>
+        <item>일주일통계</item>
+    </string-array>
+</resources>

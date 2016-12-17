@@ -5,6 +5,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -13,9 +18,11 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,8 +35,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+import java.util.Calendar;
+import java.util.Stack;
+
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback , SensorEventListener {
 
     boolean Isintent = false;
     String msg;
@@ -37,9 +48,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ListViewAdapter adapter;
     Double lat_,lon_;
     private GoogleMap mMap;
-    TextView statistics;
+    TextView statistics,walk;
     String result;
     Button reset;
+    Spinner option,total;
+    String op="";
+    String to="";
+    Button m_statistics,checking;
+    SensorManager sm;
+    Sensor sensor;
+    int dir_UP=0;
+    int dir_DOWN =0;
+    int count =0;
+    double acceleration =0;
+    double gravity = 9.81;
+    Stack<LatLng> stack1 ;
+    LatLng lng;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +73,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
 
         final DBHelper dbHelp2 = new DBHelper(getApplicationContext(), "LOGGER.db" , null ,1);
+        final DBHelper3 dbHelper3 = new DBHelper3(getApplicationContext(),"LOGGER3.db",null,1);
+        stack1 = new Stack<LatLng>();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -81,42 +109,130 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         tabHost.addTab(spec4);
 
         final TextView task_list = (TextView)findViewById(R.id.textView);
-        final TextView walk = (TextView)findViewById(R.id.textView2);
-        Button m_refresh = (Button) findViewById(R.id.button16);
-        Button m_statistics = (Button) findViewById(R.id.button17);
-        Button w_start = (Button) findViewById(R.id.button19);
+        walk = (TextView)findViewById(R.id.textView2);
+        m_statistics = (Button) findViewById(R.id.button17);
         Button w_end = (Button) findViewById(R.id.button20);
         Button w_refresh = (Button) findViewById(R.id.button21);
-        Button list_w = (Button) findViewById(R.id.button10); //list 버튼
-        reset = (Button) findViewById(R.id.button12);
+        checking = (Button) findViewById(R.id.button10);
+        //reset = (Button) findViewById(R.id.button12);
         ImageView walking = (ImageView) findViewById(R.id.imageView);
         walking.setImageResource(R.drawable.icon);
         statistics = (TextView) findViewById(R.id.textView14);
 
-        result = dbHelp2.getResult();
-        statistics.setText(result);
+        sm = (SensorManager)getSystemService(SENSOR_SERVICE);
+        sensor = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        reset.setOnClickListener(new View.OnClickListener() {
+        w_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                result = dbHelp2.getResult();
-                statistics.setText(result);
+                count =0;
+                walk.setText("" + 0 + " Steps!!");
+            }
+        });
+
+        w_end.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar rightnow = Calendar.getInstance();
+                int years = rightnow.get(Calendar.YEAR);
+                int months = rightnow.get(Calendar.MONTH)+1;
+                int dates = rightnow.get(Calendar.DATE);
+
+
+                dbHelper3.Insertwalk(years,months,dates,count);
+
             }
         });
 
 
-        list_w.setOnClickListener(new View.OnClickListener() {
+
+
+        String[] str = getResources().getStringArray(R.array.spinnerArray);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,str);
+        option = (Spinner) findViewById(R.id.spinner);
+        option.setAdapter(adapter2);
+
+        option.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent3 = new Intent(MapsActivity.this,Timeractivity.class);
-                intent3.putExtra("lat",lat_);
-                intent3.putExtra("lon",lon_);
-                startActivity(intent3);
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                op = (String) option.getSelectedItem();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+        String[] str3 = getResources().getStringArray(R.array.spinnerArray3);
+        ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,str3);
+        total = (Spinner) findViewById(R.id.spinner3);
+        total.setAdapter(adapter3);
+
+        total.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                to = (String) total.getSelectedItem();
+
+
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
 
 
             }
         });
+
+
+        checking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                if(to.equals("하루통계"))
+                {
+                    if(op.equals("장소"))
+                    {
+                        statistics.setText(dbHelp2.getlocation_one());
+                    }
+                    else if(op.equals("시작시간"))
+                    {
+                        statistics.setText(dbHelp2.getstarttime_one());
+                    }
+                    else if (op.equals("걸음수"))
+                    {
+                        statistics.setText(dbHelper3.getwalk_one());
+                    }
+                }
+                else if(to.equals("일주일통계"))
+                {
+                    if(op.equals("장소"))
+                    {
+                        statistics.setText(dbHelp2.getlocation_seven());
+                    }
+                    else if(op.equals("시작시간"))
+                    {
+                        statistics.setText(dbHelp2.getstarttime_seven());
+                    }
+                    else if(op.equals("걸음수"))
+                    {
+                        statistics.setText(dbHelper3.getwalk_seven());
+                    }
+                }
+
+
+            }
+        });
+
+
+
+
 
 
         SQLiteDatabase db = dbHelp2.getReadableDatabase();
@@ -139,9 +255,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         }
 
+
+
+        cursor.moveToFirst();
+        Calendar rightnow = Calendar.getInstance();
+        int years = rightnow.get(Calendar.YEAR);
+        int months = rightnow.get(Calendar.MONTH)+1;
+        int dates = rightnow.get(Calendar.DATE);
+        while(cursor.moveToNext())
+        {
+
+            if(cursor.getInt(4) == years && cursor.getInt(5) == months && cursor.getInt(6) == dates)
+            {
+                lng = new LatLng(cursor.getDouble(2),cursor.getDouble(3));
+                stack1.push(lng);
+            }
+        }
+
+
+
+
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {//길게 클릭했을 때
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, final long id) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
                 alert.setTitle("삭제");
                 alert.setMessage("이 리스트를 삭제하시겠습니까?");
@@ -149,7 +285,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
                         dialog.dismiss();
-                        dbHelp2.delete(position);
+                        dbHelp2.delete(id,dbHelp2);
                         adapter.deleteItem(position);
                         adapter.notifyDataSetChanged();
 
@@ -162,11 +298,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
 
+        m_statistics.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mMap.addPolyline(new PolylineOptions().addAll(stack1).width(5).color(Color.RED));
 
 
-
-
-
+            }
+        });
 
 
 
@@ -179,7 +318,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onResume() {
         super.onResume();
         adapter.notifyDataSetChanged();//리스트뷰 갱신
+        sm.registerListener(this,sensor,SensorManager.SENSOR_DELAY_NORMAL);
    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sm.unregisterListener(this);
+    }
 
     @Override
     protected void onStart() {
@@ -216,6 +363,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 minDistance,
                 gpsListener);
         Toast.makeText(getApplicationContext(), "위치 확인 시작함. 로그를 확인하세요.", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
+        {
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
+            acceleration = Math.sqrt(x*x+y*y+z*z);
+        }
+        if(acceleration - gravity >5) {
+            dir_UP =1;
+        }
+        if(dir_UP == 1 && gravity - acceleration > 5)
+        {
+            dir_DOWN =1;
+        }
+
+        if(dir_DOWN == 1)
+        {
+            count++;
+            walk.setText("" + count + " Steps!!");
+
+            dir_UP =0;
+            dir_DOWN =0;
+        }
+
+
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
     }
 
 
@@ -301,4 +483,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     }
+
+
 }
